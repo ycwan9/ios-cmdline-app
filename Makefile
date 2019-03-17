@@ -15,18 +15,21 @@ LDFLAGS	=\
 	-lsqlite3\
 	-bind_at_load
 
-GCC_ARM = $(GCC_BIN) -Os -Wall -Wextra -Wimplicit -isysroot $(SDK) $(ARCH_FLAGS)
+GCC_ARM = $(GCC_BIN) -Os -Wall -Wextra -Wimplicit -isysroot $(SDK) $(ARCH_FLAGS) -I ./theos_headers
 
 default: program
 
 program: unlock-test.o
 	@$(GCC_ARM) $(LDFLAGS) unlock-test.o -o program
 
-unlock-test.o: unlock-test.m
+unlock-test.o: theos_headers unlock-test.m
 	$(GCC_ARM) -c unlock-test.m
 
 hello.o: hello.m
 	$(GCC_ARM) -c hello.m
+
+theos_headers:
+	git clone --depth 1 https://github.com/theos/headers.git theos_headers
 
 clean:
 	rm -f *.o program

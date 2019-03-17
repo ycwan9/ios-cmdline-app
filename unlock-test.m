@@ -5,19 +5,14 @@
 #import <substrate.h>
 
 BOOL unlock(char* c_code) {
-	NSString *NSString passcode = [NSString stringWithUTF8String: c_code];
+	NSString *passcode = [NSString stringWithUTF8String: c_code];
 	id awayController_ = objc_getClass("CSAwayController") ?: objc_getClass("SBAwayController");
-	if (awayController_ && [awayController_ respondsToSelector:@selector(sharedAwayController)])
-	{
+	if (awayController_ && [awayController_ respondsToSelector:@selector(sharedAwayController)]) {
+
 		SBAwayController *awayController = [awayController_ sharedAwayController];
-		if ([awayController respondsToSelector:@selector(attemptDeviceUnlockWithPassword:lockViewOwner:)])
-		{
-			if ([[LibPass sharedInstance] respondsToSelector:@selector(getEffectiveDevicePasscode)])
-			{
-				return [awayController attemptDeviceUnlockWithPassword:passcode lockViewOwner:nil];
-			} else {
-			NSLog (@"[[LibPass sharedInstance] respondsToSelector:@selector(getEffectiveDevicePasscode)] = flase");
-		}
+
+		if ([awayController respondsToSelector:@selector(attemptDeviceUnlockWithPassword:lockViewOwner:)]) {
+			return [awayController attemptDeviceUnlockWithPassword:passcode lockViewOwner:nil];
 
 		} else {
 			NSLog (@"[awayController respondsToSelector:@selector(attemptDeviceUnlockWithPassword:lockViewOwner:)] = flase");
