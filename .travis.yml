@@ -4,7 +4,7 @@ script: make
 deploy:
   provider: releases
   api_key: $GITHUB_OAUTH_TOKEN
-  file: "hello"
+  file: "program"
   skip_cleanup: true
   on:
     tags: true

@@ -17,11 +17,16 @@ LDFLAGS	=\
 
 GCC_ARM = $(GCC_BIN) -Os -Wall -Wextra -Wimplicit -isysroot $(SDK) $(ARCH_FLAGS)
 
-default: hello.o
-	@$(GCC_ARM) $(LDFLAGS) hello.o -o hello
+default: program
+
+program: unlock-test.o
+	@$(GCC_ARM) $(LDFLAGS) unlock-test.o -o program
+
+unlock-test.o: unlock-test.m
+	$(GCC_ARM) -c unlock-test.m
 
 hello.o: hello.m
 	$(GCC_ARM) -c hello.m
 
 clean:
-	rm -f *.o hello
+	rm -f *.o program
