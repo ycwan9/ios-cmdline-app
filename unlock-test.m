@@ -7,18 +7,23 @@
 BOOL unlock(char* c_code) {
 	NSString *passcode = [NSString stringWithUTF8String: c_code];
 	id awayController_ = objc_getClass("CSAwayController") ?: objc_getClass("SBAwayController");
-	if (awayController_ && [awayController_ respondsToSelector:@selector(sharedAwayController)]) {
+	if (awayController_) {
+		if ([awayController_ respondsToSelector:@selector(sharedAwayController)]) {
 
-		SBAwayController *awayController = [awayController_ sharedAwayController];
+			SBAwayController *awayController = [awayController_ sharedAwayController];
 
-		if ([awayController respondsToSelector:@selector(attemptDeviceUnlockWithPassword:lockViewOwner:)]) {
+			if ([awayController respondsToSelector:@selector(attemptDeviceUnlockWithPassword:lockViewOwner:)]) {
 			return [awayController attemptDeviceUnlockWithPassword:passcode lockViewOwner:nil];
 
+			} else {
+				NSLog (@"[awayController respondsToSelector:@selector(attemptDeviceUnlockWithPassword:lockViewOwner:)] = flase");
+			}
 		} else {
-			NSLog (@"[awayController respondsToSelector:@selector(attemptDeviceUnlockWithPassword:lockViewOwner:)] = flase");
+			NSLog (@"[awayController_ respondsToSelector:@selector(sharedAwayController)] == false");
 		}
+
 	} else {
-		NSLog (@"awayController_ && [awayController_ respondsToSelector:@selector(sharedAwayController)] == false");
+		NSLog (@"awayController_ == false");
 	}
 	//[(SBLockScreenViewController*)[[objc_getClass("SBLockScreenManager") sharedInstance] lockScreenViewController] passcodeLockViewPasscodeEntered:nil];
 	//[(SBLockScreenManager *)[objc_getClass("SBLockScreenManager") sharedInstance] attemptUnlockWithPasscode:[NSString stringWithFormat:@"%@", self.devicePasscode]];
